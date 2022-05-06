@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#myHeader {
+  background-color: lightblue;
+  color: black;
+  padding: 40px;
+  text-align: center;
+}
+
+.classification {
+  background-color: tomato;
+  color: white;
+  padding: 10px;
+} 
+</style>
+</head>
+<body>
+
+<h1 id="myHeader">AIRBUS</h1>
+{% for division in divisions %}
+<h2 class="classification">{{ division }}</h2>
+{% endfor %}
+</body>
+</html>
+
