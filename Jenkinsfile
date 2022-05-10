@@ -12,7 +12,9 @@ node("ubuntu-vakees"){
     stage('Building Docker Image') {
         // Build the docker image
         try { 
-            sh 'docker build -t airbus-release:latest .' 
+            dir('airbus-release') {
+                def customImage = docker.build("airbus-release:latest") 
+            }
         } catch (exc) {
             echo "Docker build failed"
             status = false
@@ -20,10 +22,12 @@ node("ubuntu-vakees"){
     }
     stage("Deploy"){
         try{
-            if ( status == true ){
-                sh 'terraform init'
-                sh 'terraform plan'
-                sh 'terraform apply'
+            dir('airbus-release') {
+                if ( status == true ){
+                    sh 'terraform init'
+                    sh 'terraform plan'
+                    sh 'terraform apply'
+                }
             }
             else {
                 echo "Deploy skipped due to failure in the previous steps"
