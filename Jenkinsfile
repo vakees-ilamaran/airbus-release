@@ -28,9 +28,9 @@ node("ubuntu-vakees"){
                     sh 'terraform plan'
                     sh 'terraform apply'
                 }
-            }
-            else {
-                echo "Deploy skipped due to failure in the previous steps"
+                else {
+                    echo "Deploy skipped due to failure in the previous steps"
+                }
             }
         } catch (exc) {
             echo "Deployment failed"
