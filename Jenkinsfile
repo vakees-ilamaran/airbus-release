@@ -1,7 +1,7 @@
 def status = true
 node("ubuntu-vakees"){
     stage('Preparation') { 
-        sh 'git clone -b ${env.BRANCH_NAME} https://github.com/vakees-ilamaran/airbus-release'
+        sh "git clone -b ${env.BRANCH_NAME} https://github.com/vakees-ilamaran/airbus-release"
         if ( env.BRANCH_NAME == 'main' ) {
             currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
             echo 'The Official release is processing'
