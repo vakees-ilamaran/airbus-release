@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    airbus_division = ["commercials", "Defence and Space", "Helicopters", "Operations"]
+    airbus_division = ["commercials", "Defence and Space", "Helicopters"]
     return render_template('index.html', divisions = airbus_division)
 
 if __name__ == '__main__':
