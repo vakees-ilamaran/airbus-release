@@ -25,7 +25,7 @@ node("ubuntu-vakees"){
             status = false
         }
     }
-    withEnv(['TF_VAR_tag=${tag}']) {
+    withEnv(["TF_VAR_tag=${tag}"]) {
     stage("Deploy"){
         try{
             dir("${env.WORKSPACE}/airbus-release") {
