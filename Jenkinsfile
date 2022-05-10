@@ -1,21 +1,15 @@
 def status = true
 node("ubuntu-vakees"){
-    
-    environment {
-        if ( env.BRANCH_NAME == 'main') {
-            tag="latest"
-        } else {
-            tag="dev"
-        }
-    }
     stage('Preparation') { 
         sh "rm -rf * && \
             git clone -b ${env.BRANCH_NAME} https://github.com/vakees-ilamaran/airbus-release.git"
         if ( env.BRANCH_NAME == 'main' ) {
             currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
+            export TF_VAR_tag = "latest"
             echo 'The Official release is processing'
         } else {
             currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
+            export TF_VAR_tag = "dev"
             echo 'The development release is processing'
         }
     }
@@ -23,7 +17,7 @@ node("ubuntu-vakees"){
         // Build the docker image
         try { 
             dir("${env.WORKSPACE}/airbus-release") {
-                docker.build("airbus-release:${env.tag}") 
+                docker.build("airbus-release:${env.TF_VAR_tag}") 
             }
         } catch (exc) {
             echo "Docker build failed"
@@ -38,7 +32,7 @@ node("ubuntu-vakees"){
                         sh '''
                             terraform init
                             terraform plan
-                            terraform apply --auto-approve -var tag=${env.tag}
+                            terraform apply --auto-approve
                             '''
                     }
                     else {
