@@ -2,10 +2,10 @@ def status = true
 node("ubuntu-vakees"){
     
     environment {
-        if ( env.BRANCH_NAME == main) {
-            tag = "latest" 
+        if ( env.BRANCH_NAME == 'main') {
+            TF_VAR_tag="latest"
         } else {
-            tag = "dev"
+            TF_VAR_tag="dev"
         }
     }
     stage('Preparation') { 
@@ -23,7 +23,7 @@ node("ubuntu-vakees"){
         // Build the docker image
         try { 
             dir("${env.WORKSPACE}/airbus-release") {
-                docker.build("airbus-release:${env.tag}") 
+                docker.build("airbus-release:${env.TF_VAR_tag}") 
             }
         } catch (exc) {
             echo "Docker build failed"
