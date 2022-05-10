@@ -12,11 +12,16 @@ variable "tag" {
     description = "This is the tag used for docker image"
 }
 
+variable "port" {
+    type        = number
+    description = "port for the service"
+}
+
 resource "docker_container" "deploy" {
-  name  = "manager"
+  name  = "manager-${var.tag}"
   image = "airbus-release:${var.tag}"
   ports {
-      internal = 5000
-      external = 5000
+      internal = var.port
+      external = var.port
   }
 }

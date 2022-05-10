@@ -1,31 +1,34 @@
 def status = true
 def tag = "latest"
+def port = 8081
+if (env.BRANCH_NAME != 'main') {
+    tag = "dev"
+    echo "The development release is processing"
+    port = 8082
+} else {
+    echo "The Official release is processing"
+}
+
 node("ubuntu-vakees"){
     stage('Preparation') { 
+        currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
         sh "rm -rf * && \
-            git clone -b ${env.BRANCH_NAME} https://github.com/vakees-ilamaran/airbus-release.git"
-        if ( env.BRANCH_NAME == 'main' ) {
-            currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
-            tag = "latest"
-            echo 'The Official release is processing'
-        } else {
-            currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
-            tag = "dev"
-            echo 'The development release is processing'
-        }
+            git clone -b ${env.BRANCH_NAME} https://github.com/vakees-ilamaran/airbus-release.git && \
+            docker rm -f manager-${tag} && \
+            docker rmi -f airbus-release:${tag}"
     }
     stage('Building Docker Image') {
         // Build the docker image
         try { 
             dir("${env.WORKSPACE}/airbus-release") {
-                docker.build("airbus-release:${tag}") 
+                docker.build("airbus-release:${tag}", "-e PORT=${port}") 
             }
         } catch (exc) {
             echo "Docker build failed"
             status = false
         }
     }
-    withEnv(["TF_VAR_tag=${tag}"]) {
+    withEnv(["TF_VAR_tag=${tag}", "TF_VAR_port=${port}"]) {
     stage("Deploy"){
         try{
             dir("${env.WORKSPACE}/airbus-release") {
@@ -38,7 +41,7 @@ node("ubuntu-vakees"){
                             '''
                     }
                     else {
-                        echo "Deploy skipped due to failure in the previous steps"
+                        echo "Deploy skipped due to image building failure"
                     }
                 }
             }
