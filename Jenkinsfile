@@ -2,18 +2,18 @@ def status = true
 node("ubuntu-vakees"){
     def mvnHome
     stage('Preparation') { 
-        if (env.BRANCH_NAME == 'main') {
-            currentBuild.description = "#${BUILD_NUMBER}, branch ${BRANCH}"
+        if ( env.BRANCH_NAME == 'main' ) {
+            currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
             echo 'The Official release is processing'
         } else {
-            currentBuild.description = "#${BUILD_NUMBER}, branch ${BRANCH}"
+            currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
             echo 'The development release is processing'
         }
     }
     stage('Building Docker Image') {
         // Build the docker image
         try { 
-            def customImage = docker.build("airbus-release:${env.BUILD_ID}") 
+            def customImage = docker.build("airbus-release:latest") 
         } catch (exc) {
             echo "Docker build failed"
             status = false

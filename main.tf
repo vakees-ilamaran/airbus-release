@@ -1,4 +1,4 @@
 resource "docker_container" "deploy" {
   name  = "manager"
-  image = manager.latest
+  image = airbus-release.latest
 }
