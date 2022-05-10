@@ -35,9 +35,11 @@ node("ubuntu-vakees"){
             dir("${env.WORKSPACE}/airbus-release") {
                 ansiColor('xterm') {
                     if ( status == true ){
-                        sh 'terraform init'
-                        sh 'terraform plan'
-                        sh 'terraform apply'
+                        sh '''
+                            terraform init
+                            terraform plan
+                            terraform apply
+                            '''
                     }
                     else {
                         echo "Deploy skipped due to failure in the previous steps"
