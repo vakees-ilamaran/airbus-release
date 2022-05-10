@@ -1,7 +1,5 @@
 def status = true
 node("ubuntu-vakees"){
-    options {
-        ansiColor('xterm')
     
     environment {
         if ( env.BRANCH_NAME == main) {
@@ -35,18 +33,19 @@ node("ubuntu-vakees"){
     stage("Deploy"){
         try{
             dir("${env.WORKSPACE}/airbus-release") {
-                if ( status == true ){
-                    sh 'terraform init'
-                    sh 'terraform plan'
-                    sh 'terraform apply'
-                }
-                else {
-                    echo "Deploy skipped due to failure in the previous steps"
+                ansiColor('xterm') {
+                    if ( status == true ){
+                        sh 'terraform init'
+                        sh 'terraform plan'
+                        sh 'terraform apply'
+                    }
+                    else {
+                        echo "Deploy skipped due to failure in the previous steps"
+                    }
                 }
             }
         } catch (exc) {
             echo "Deployment failed"
         }
-    }
     }
 }
