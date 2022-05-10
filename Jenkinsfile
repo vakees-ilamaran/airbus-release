@@ -29,6 +29,8 @@ node("ubuntu-vakees"){
             else {
                 echo "Deploy skipped due to failure in the previous steps"
             }
+        } catch (exc) {
+            echo "Deployment failed"
         }
     }
 }
