@@ -2,8 +2,10 @@ FROM python:3.9-slim
 
 LABEL maintainer="vakees.ilamaran@gmail.com"
 
-RUN pip install --upgrade pip
+ARG PORT_DATA
+ENV PORT=$PORT_DATA
 
+RUN pip install --upgrade pip
 RUN adduser manager --home /home/manager
 USER manager
 WORKDIR /home/manager
