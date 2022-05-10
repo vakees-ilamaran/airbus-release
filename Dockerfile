@@ -1,7 +1,8 @@
 FROM python:3.9-slim
 
 LABEL maintainer="vakees.ilamaran@gmail.com"
-ENV PORT=8081
+ARG PORT_DATA=8081
+ENV PORT=${PORT_DATA}
 RUN pip install --upgrade pip
 
 RUN adduser manager --home /home/manager
