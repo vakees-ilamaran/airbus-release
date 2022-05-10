@@ -21,7 +21,7 @@ node("ubuntu-vakees"){
         // Build the docker image
         try { 
             dir("${env.WORKSPACE}/airbus-release") {
-                docker.build("airbus-release:${tag}", "--build-arg PORT=${port} .") 
+                docker.build("airbus-release:${tag}", "--build-arg PORT_DATA=${port} .") 
             }
         } catch (exc) {
             echo "Docker build failed"
