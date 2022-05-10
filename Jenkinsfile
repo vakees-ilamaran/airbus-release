@@ -3,9 +3,9 @@ node("ubuntu-vakees"){
     
     environment {
         if ( env.BRANCH_NAME == 'main') {
-            TF_VAR_tag="latest"
+            tag="latest"
         } else {
-            TF_VAR_tag="dev"
+            tag="dev"
         }
     }
     stage('Preparation') { 
@@ -23,7 +23,7 @@ node("ubuntu-vakees"){
         // Build the docker image
         try { 
             dir("${env.WORKSPACE}/airbus-release") {
-                docker.build("airbus-release:${env.TF_VAR_tag}") 
+                docker.build("airbus-release:${env.tag}") 
             }
         } catch (exc) {
             echo "Docker build failed"
@@ -38,7 +38,7 @@ node("ubuntu-vakees"){
                         sh '''
                             terraform init
                             terraform plan
-                            terraform apply --auto-approve
+                            terraform apply --auto-approve -var tag=${env.tag}
                             '''
                     }
                     else {
