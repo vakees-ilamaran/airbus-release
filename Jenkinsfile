@@ -12,8 +12,8 @@ node("ubuntu-vakees"){
     stage('Building Docker Image') {
         // Build the docker image
         try { 
-            dir("${env.WORKSPACE}/airbus-release") {
-                def customImage = docker.build("airbus-release:latest") 
+            dir("${env.WORKSPACE}") {
+                docker.build("airbus-release:latest") 
             }
         } catch (exc) {
             echo "Docker build failed"
@@ -22,7 +22,7 @@ node("ubuntu-vakees"){
     }
     stage("Deploy"){
         try{
-            dir("${env.WORKSPACE}/airbus-release") {
+            dir("${env.WORKSPACE}") {
                 if ( status == true ){
                     sh 'terraform init'
                     sh 'terraform plan'
