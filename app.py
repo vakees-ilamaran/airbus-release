@@ -8,5 +8,5 @@ def index():
     airbus_division = ["commercials", "Defence and Space", "Helicopters"]
     return render_template('index.html', divisions = airbus_division)
 
-if __name == '__main__':
+if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

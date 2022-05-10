@@ -1,17 +1,17 @@
 FROM python:3.9-slim
 
-MAINTANER Your Name "vakees.ilamaran@gmail.com"
+LABEL maintainer="vakees.ilamaran@gmail.com"
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip 
+RUN pip install --upgrade pip
 
-# We copy just the requirements.txt first to leverage Docker cache
-COPY ./requirements.txt /app/requirements.txt
+RUN adduser manager --home /home/manager
+USER manager
+WORKDIR /home/manager
+COPY --chown=manager:manager requirements.txt requirements.txt 
+COPY --chown=manager:manager templates/* templates/
+RUN pip install --user -r requirements.txt
+ENV PATH="/home/manager/.local/bin:${PATH}"
 
-WORKDIR /app 
+COPY --chown=manager:manager app.py .
 
-RUN pip install -r requirements.txt
-
-COPY app.py /app
-
-CMD [ "app.py" ]
+CMD ["python3", "app.py" ]
