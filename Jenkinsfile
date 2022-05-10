@@ -1,6 +1,17 @@
 def status = true
 node("ubuntu-vakees"){
+    environment {
+        if ( env.BRANCH_NAME == main) {
+            tag = "latest" 
+        } else {
+            tag = "dev"
+        }
+    }
     stage('Preparation') { 
+        sh "
+            rm -rf * && \
+            git checkout -b ${env.BRANCH_NAME} https://github.com/vakees-ilamaran/airbus-release.git
+            "
         if ( env.BRANCH_NAME == 'main' ) {
             currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
             echo 'The Official release is processing'
@@ -12,8 +23,8 @@ node("ubuntu-vakees"){
     stage('Building Docker Image') {
         // Build the docker image
         try { 
-            dir("${env.WORKSPACE}") {
-                docker.build("airbus-release:latest") 
+            dir("${env.WORKSPACE}/airbus-release") {
+                docker.build("airbus-release:${env.tag}") 
             }
         } catch (exc) {
             echo "Docker build failed"
@@ -22,7 +33,7 @@ node("ubuntu-vakees"){
     }
     stage("Deploy"){
         try{
-            dir("${env.WORKSPACE}") {
+            dir("${env.WORKSPACE}/airbus-release") {
                 if ( status == true ){
                     sh 'terraform init'
                     sh 'terraform plan'
