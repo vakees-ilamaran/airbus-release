@@ -8,8 +8,8 @@ node("ubuntu-vakees"){
         }
     }
     stage('Preparation') { 
-        sh " rm -rf * && \
-            git checkout -b ${env.BRANCH_NAME} https://github.com/vakees-ilamaran/airbus-release.git"
+        sh 'rm -rf *'
+        sh "git checkout -b ${env.BRANCH_NAME} https://github.com/vakees-ilamaran/airbus-release.git"
         if ( env.BRANCH_NAME == 'main' ) {
             currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
             echo 'The Official release is processing'
