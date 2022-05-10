@@ -29,24 +29,25 @@ node("ubuntu-vakees"){
         }
     }
     withEnv(["TF_VAR_tag=${tag}", "TF_VAR_port=${port}"]) {
-    stage("Deploy"){
-        try{
-            dir("${env.WORKSPACE}/airbus-release") {
-                ansiColor('xterm') {
-                    if ( status == true ){
-                        sh '''
-                            terraform init
-                            terraform plan
-                            terraform apply --auto-approve
-                            '''
-                    }
-                    else {
-                        echo "Deploy skipped due to image building failure"
+        stage("Deploy"){
+            try{
+                dir("${env.WORKSPACE}/airbus-release") {
+                    ansiColor('xterm') {
+                        if ( status == true ){
+                            sh '''
+                                terraform init
+                                terraform plan
+                                terraform apply --auto-approve
+                                '''
+                        }
+                        else {
+                            echo "Deploy skipped due to image building failure"
+                        }
                     }
                 }
+            } catch (exc) {
+                echo "Deployment failed"
             }
-        } catch (exc) {
-            echo "Deployment failed"
         }
     }
 }
