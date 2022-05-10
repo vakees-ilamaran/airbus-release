@@ -12,7 +12,7 @@ node("ubuntu-vakees"){
     stage('Building Docker Image') {
         // Build the docker image
         try { 
-            def customImage = docker.build("airbus-release:latest") 
+            sh 'docker build -t airbus-release:latest .' 
         } catch (exc) {
             echo "Docker build failed"
             status = false
