@@ -1,5 +1,8 @@
 def status = true
 node("ubuntu-vakees"){
+    options {
+        ansiColor('xterm')
+    
     environment {
         if ( env.BRANCH_NAME == main) {
             tag = "latest" 
@@ -44,5 +47,6 @@ node("ubuntu-vakees"){
         } catch (exc) {
             echo "Deployment failed"
         }
+    }
     }
 }
