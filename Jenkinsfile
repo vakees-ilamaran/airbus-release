@@ -1,15 +1,16 @@
 def status = true
+def tag = "latest"
 node("ubuntu-vakees"){
     stage('Preparation') { 
         sh "rm -rf * && \
             git clone -b ${env.BRANCH_NAME} https://github.com/vakees-ilamaran/airbus-release.git"
         if ( env.BRANCH_NAME == 'main' ) {
             currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
-            def tag = "latest"
+            tag = "latest"
             echo 'The Official release is processing'
         } else {
             currentBuild.description = "#${env.BUILD_NUMBER}, branch ${env.BRANCH_NAME}"
-            def tag = "dev"
+            tag = "dev"
             echo 'The development release is processing'
         }
     }
