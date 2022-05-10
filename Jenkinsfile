@@ -49,5 +49,4 @@ node("ubuntu-vakees"){
             echo "Deployment failed"
         }
     }
-    }
 }
